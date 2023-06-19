@@ -190,4 +190,18 @@ def post_show(request, pk):
 		return render(request, "show_post.html", {'post':post})
 	else:
 		messages.success(request, ("Hmm... A missing post O_O"))
-		return redirect('home')		
+		return redirect('home')
+
+def post_delete(request, pk):
+	if request.user.is_authenticated:
+		post = get_object_or_404(Post, id=pk)		
+		if request.user.username == post.user.username:			
+			post.delete()			
+			messages.success(request, ("Post Deleted!"))
+			return redirect(request.META.get("HTTP_REFERER"))	
+		else:
+			messages.success(request, ("Cannot Delete Post"))
+			return redirect('home')
+	else:
+		messages.success(request, ("Please log in to view this awesome content"))
+		return redirect(request.META.get("HTTP_REFERER"))

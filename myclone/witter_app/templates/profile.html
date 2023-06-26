@@ -44,8 +44,10 @@
 	<i class="fa-solid fa-share" style="color:gray"></i>
 		  	</a>
 			{% if request.user.username == profile.user.username %}
+			&nbsp;&nbsp;
+			<a href="{% url 'post_edit' post.id %}"><i class="fa fa-edit" style="color:rgb(4, 0, 255)"></i></a>
 		  	&nbsp;&nbsp;
-<a href="{% url 'post_delete' post.id %}"><i class="fa fa-trash" style="color:rgb(0, 0, 0)"></i></a>
+			<a href="{% url 'post_delete' post.id %}"><i class="fa fa-trash" style="color:rgb(0, 0, 0)"></i></a>
 			{% endif %}
 
 

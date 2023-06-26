@@ -205,3 +205,25 @@ def post_delete(request, pk):
 	else:
 		messages.success(request, ("Please log in to view this awesome content"))
 		return redirect(request.META.get("HTTP_REFERER"))
+	
+def post_edit(request, pk):
+	if request.user.is_authenticated:
+		post = get_object_or_404(Post, id=pk)
+		if request.user.username == post.user.username:			
+			form = PostForm(request.POST or None, instance=post)
+			if request.method == "POST":
+				if form.is_valid():
+					post = form.save(commit=False)
+					post.user = request.user
+					post.save()
+					messages.success(request, ("Post Updated!"))
+					return redirect('home')
+			else:				
+				return render(request, "update_post.html", {'form': form, 'post': post})			
+
+		else:
+			messages.success(request, ("Cannot Edit Post"))
+			return redirect('home')
+	else:
+		messages.success(request, ("Please log in to view this awesome content"))
+		return redirect('home')
